@@ -3,7 +3,6 @@
 @section('content')
 
 <style>
-
 .header{
     display:flex;
     justify-content:space-between;
@@ -29,9 +28,7 @@
     transition:.3s;
 }
 
-.btn:hover{
-    background:#ff3357;
-}
+.btn:hover{ background:#ff3357; }
 
 .card{
     background:white;
@@ -41,11 +38,9 @@
     margin-bottom:25px;
 }
 
-.form-group{
-    margin-bottom:18px;
-}
+.form-group{ margin-bottom:18px; }
 
-.form-group label{
+label{
     display:block;
     margin-bottom:8px;
     font-size:14px;
@@ -53,8 +48,7 @@
     color:#374151;
 }
 
-input,
-textarea{
+input, textarea, select{
     width:100%;
     padding:12px;
     border:1px solid #ddd;
@@ -79,26 +73,15 @@ th{
     padding:18px;
     text-align:left;
     font-size:14px;
-    font-weight:600;
 }
 
 td{
     padding:18px;
-    vertical-align:middle;
 }
 
-tr{
-    border-bottom:1px solid #f1f5f9;
-}
+tr{ border-bottom:1px solid #f1f5f9; }
 
-tr:hover{
-    background:#fafafa;
-}
-
-.harga{
-    color:#ff4d6d;
-    font-weight:700;
-}
+tr:hover{ background:#fafafa; }
 
 .empty{
     text-align:center;
@@ -111,72 +94,43 @@ tr:hover{
     height:90px;
     object-fit:cover;
     border-radius:12px;
-    border:2px solid #f3f4f6;
 }
 
 .aksi{
     display:flex;
     gap:10px;
-    align-items:center;
 }
 
-.edit-btn,
-.delete-btn{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    min-width:80px;
-    height:40px;
-    border:none;
+/* 🔥 FIX UTAMA DI SINI */
+.edit-btn, .delete-btn{
+    padding:10px 14px;
     border-radius:10px;
-    font-size:14px;
     font-weight:600;
     text-decoration:none;
-    cursor:pointer;
-    transition:.3s;
-}
-
-.edit-btn{
-    background:#3b82f6;
     color:white;
-}
-
-.edit-btn:hover{
-    background:#2563eb;
-}
-
-.delete-btn{
-    background:#ef4444;
-    color:white;
-}
-
-.delete-btn:hover{
-    background:#dc2626;
-}
-
-.btn-secondary{
-    background:#e5e7eb;
-    color:#374151;
     border:none;
-    padding:12px 22px;
-    border-radius:10px;
     cursor:pointer;
+    display:inline-block;
     font-size:14px;
+}
+
+.edit-btn{ background:#3b82f6; }
+.delete-btn{ background:#ef4444; }
+
+button{
+    font-family:inherit;
+}
+
+.price-box{
+    display:inline-block;
+    padding:6px 12px;
+    border-radius:8px;
+    background:#ffe4e6;
+    color:#ff4d6d;
     font-weight:600;
+    font-size:13px;
 }
-
-.btn-secondary:hover{
-    background:#d1d5db;
-}
-
-.form-buttons{
-    display:flex;
-    gap:10px;
-    margin-top:20px;
-}
-
 </style>
-
 
 <div class="header">
     <div class="title">Kelola Layanan</div>
@@ -186,15 +140,18 @@ tr:hover{
     </button>
 </div>
 
+@if(session('success'))
+<div style="background:#dcfce7;color:#166534;padding:12px;border-radius:10px;margin-bottom:15px;">
+    {{ session('success') }}
+</div>
+@endif
 
+{{-- FORM --}}
 <div class="card" id="formLayanan" style="display:none;">
 
-    <h3 style="margin-bottom:25px;">Tambah Layanan Baru</h3>
+    <h3 style="margin-bottom:20px;">Tambah Layanan</h3>
 
-    <form action="/mitra/layanan"
-          method="POST"
-          enctype="multipart/form-data">
-
+    <form action="/mitra/layanan" method="POST" enctype="multipart/form-data">
         @csrf
 
         <div class="form-group">
@@ -202,19 +159,14 @@ tr:hover{
             <input type="text" name="nama_layanan" required>
         </div>
 
-        <!-- ✅ VARIAN FLEXIBLE -->
         <div class="form-group">
-            <label>Varian Layanan</label>
-            <input type="text"
-                   name="varian"
-                   required>
+            <label>Varian</label>
+            <input type="text" name="varian" required>
         </div>
 
         <div class="form-group">
-            <label>Harga Layanan</label>
-            <input type="text"
-                   name="harga" 
-                   id="harga" required>
+            <label>Harga</label>
+            <input type="number" name="harga" required>
         </div>
 
         <div class="form-group">
@@ -223,129 +175,92 @@ tr:hover{
         </div>
 
         <div class="form-group">
-            <label>Deskripsi Layanan</label>
-            <textarea name="deskripsi" placeholder="Masukkan deskripsi layanan"></textarea>
+            <label>Deskripsi</label>
+            <textarea name="deskripsi"></textarea>
         </div>
 
         <div class="form-group">
-            <label>Foto Layanan</label>
-            <input type="file" name="foto" accept="image/*">
+            <label>Foto</label>
+            <input type="file" name="foto">
         </div>
 
-        <div class="form-buttons">
-            <button type="submit" class="btn">
-                Simpan Layanan
-            </button>
-
-            <button type="button"
-                    class="btn-secondary"
-                    onclick="showForm()">
-                Batal
-            </button>
-        </div>
+        <button type="submit" class="btn">Simpan</button>
+        <button type="button" class="btn" style="background:#6b7280;" onclick="showForm()">Batal</button>
 
     </form>
-
 </div>
 
-
+{{-- TABLE --}}
 <div class="card" id="tableLayanan">
 
-    <table>
+<table>
+    <tr>
+        <th>Foto</th>
+        <th>Nama</th>
+        <th>Varian</th>
+        <th>Harga</th>
+        <th>Durasi</th>
+        <th>Deskripsi</th>
+        <th>Aksi</th>
+    </tr>
 
-        <tr>
-            <th>Foto</th>
-            <th>Nama Layanan</th>
-            <th>Varian</th>
-            <th>Harga</th>
-            <th>Durasi</th>
-            <th>Deskripsi</th>
-            <th>Aksi</th>
-        </tr>
+    @forelse($layanans as $layanan)
 
-        @forelse($layanans as $layanan)
+    <tr>
+        <td>
+            @if($layanan->foto)
+                <img src="{{ asset('storage/'.$layanan->foto) }}" class="foto-layanan">
+            @else
+                -
+            @endif
+        </td>
 
-        <tr>
+        <td>{{ $layanan->nama_layanan }}</td>
+        <td>{{ $layanan->varian }}</td>
 
-            <td>
-                @if($layanan->foto)
-                    <img src="{{ asset('storage/' . $layanan->foto) }}" class="foto-layanan">
-                @else
-                    -
-                @endif
-            </td>
+        <td>
+            <div class="price-box">
+            Rp {{ number_format($layanan->harga,0,',','.') }}
+            </div>
+        </td>
 
-            <td>{{ $layanan->nama_layanan }}</td>
+        <td>{{ $layanan->durasi }} menit</td>
+        <td>{{ $layanan->deskripsi }}</td>
 
-            <td>{{ $layanan->varian }}</td>
+        <td>
+            <div class="aksi">
+                <a href="/mitra/layanan/{{ $layanan->id }}/edit" class="edit-btn">
+                    ✏️ 
+                </a>
 
-            <td class="harga">
-                Rp{{ number_format($layanan->harga,0,',','.') }}
-            </td>
+                <form action="/mitra/layanan/{{ $layanan->id }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button class="delete-btn">
+                        🗑️
+                    </button>
+                </form>
+            </div>
+        </td>
+    </tr>
 
-            <td>{{ $layanan->durasi }} menit</td>
+    @empty
+    <tr>
+        <td colspan="7" class="empty">Belum ada layanan</td>
+    </tr>
+    @endforelse
 
-            <td>{{ $layanan->deskripsi }}</td>
-
-            <td>
-                <div class="aksi">
-
-                    <a href="/mitra/layanan/{{ $layanan->id }}/edit"
-                       class="edit-btn">
-                        Edit
-                    </a>
-
-                    <form action="/mitra/layanan/{{ $layanan->id }}"
-                          method="POST">
-
-                        @csrf
-                        @method('DELETE')
-
-                        <button type="submit"
-                                class="delete-btn"
-                                onclick="return confirm('Yakin hapus layanan?')">
-                            Hapus
-                        </button>
-
-                    </form>
-
-                </div>
-            </td>
-
-        </tr>
-
-        @empty
-
-        <tr>
-            <td colspan="7" class="empty">
-                Belum ada layanan
-            </td>
-        </tr>
-
-        @endforelse
-
-    </table>
+</table>
 
 </div>
 
-
 <script>
-
-function showForm()
-{
+function showForm(){
     let form = document.getElementById('formLayanan');
     let table = document.getElementById('tableLayanan');
 
-    if(form.style.display === 'none')
-    {
-        form.style.display = 'block';
-        table.style.display = 'none';
-    }
-    else
-    {
-        form.style.display = 'none';
-        table.style.display = 'block';
-    }
+    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    table.style.display = table.style.display === 'none' ? 'block' : 'none';
 }
 
 </script>

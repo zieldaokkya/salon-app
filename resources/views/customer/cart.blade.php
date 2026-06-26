@@ -2,11 +2,9 @@
 <html>
 <head>
     <title>Keranjang Booking</title>
-
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <style>
-
         *{
             margin:0;
             padding:0;
@@ -25,10 +23,29 @@
         }
 
         .header{
+            display:flex;
+            align-items:center;
+            gap:15px;
             margin-bottom:25px;
         }
+
+        .back{
+            width:40px;
+            height:40px;
+            border-radius:50%;
+            background:white;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            text-decoration:none;
+            color:#222;
+            font-size:18px;
+            font-weight:bold;
+            box-shadow:0 3px 10px rgba(0,0,0,.08);
+        }
+
         .title{
-            font-size:28px;
+            font-size:24px;
             font-weight:700;
             color:#222;
         }
@@ -38,11 +55,9 @@
             border-radius:18px;
             padding:15px;
             margin-bottom:18px;
-
             display:flex;
             justify-content:space-between;
             align-items:center;
-
             box-shadow:0 4px 12px rgba(0,0,0,.05);
         }
 
@@ -68,20 +83,18 @@
             font-size:16px;
             font-weight:600;
             color:#222;
-            margin-bottom:4px;
         }
 
         .durasi{
             color:#888;
             font-size:13px;
-            margin-bottom:4px;
         }
 
         .harga{
-    color:#ff4f8b;
-    font-weight:600;
-    font-size:15px;
-}
+            color:#ff4f8b;
+            font-weight:600;
+            font-size:15px;
+        }
 
         .qty-box{
             display:flex;
@@ -92,20 +105,14 @@
         .qty-btn{
             width:36px;
             height:36px;
-
             border-radius:10px;
-
             display:flex;
             justify-content:center;
             align-items:center;
-
             text-decoration:none;
-
             background:#f7f7f7;
             border:1px solid #ececec;
-
             color:#333;
-
             font-size:18px;
             font-weight:600;
         }
@@ -134,7 +141,6 @@
             margin-top:15px;
             padding-top:15px;
             border-top:1px solid #eee;
-
             font-size:18px;
             font-weight:700;
             color:#222;
@@ -145,16 +151,11 @@
             border:none;
             background:#ff4f8b;
             color:white;
-
             height:50px;
-
             border-radius:12px;
-
             font-size:15px;
             font-weight:600;
-
             margin-top:20px;
-
             cursor:pointer;
         }
 
@@ -165,41 +166,7 @@
             text-align:center;
             color:#888;
         }
-
-        .header{
-    display:flex;
-    align-items:center;
-    gap:15px;
-    margin-bottom:25px;
-}
-
-.back{
-    width:40px;
-    height:40px;
-    border-radius:50%;
-    background:white;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    text-decoration:none;
-    color:#222;
-
-    font-size:18px;
-    font-weight:bold;
-
-    box-shadow:0 3px 10px rgba(0,0,0,.08);
-}
-
-.title{
-    font-size:24px;
-    font-weight:700;
-    color:#222;
-}
-
     </style>
-
 </head>
 
 <body>
@@ -207,14 +174,8 @@
 <div class="container">
 
     <div class="header">
-        <a href="/home" class="back">
-            ←
-        </a>
-
-        <div class="title">
-            Keranjang
-        </div>
-
+        <a href="/home" class="back">←</a>
+        <div class="title">Keranjang</div>
     </div>
 
     @php
@@ -234,10 +195,8 @@
 
                 <div class="item-left">
 
-                    <img
-                        src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f"
-                        class="item-img"
-                    >
+                    <img src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f"
+                         class="item-img">
 
                     <div class="item-info">
 
@@ -250,7 +209,7 @@
                         </div>
 
                         <div class="harga">
-                            Rp{{ number_format($item['harga']) }}
+                            Rp{{ number_format($item['harga'], 0, ',', '.') }}
                         </div>
 
                     </div>
@@ -258,21 +217,9 @@
                 </div>
 
                 <div class="qty-box">
-
-                    <a href="/cart/decrease/{{ $item['id'] }}"
-                       class="qty-btn">
-                        -
-                    </a>
-
-                    <div class="qty">
-                        {{ $item['qty'] }}
-                    </div>
-
-                    <a href="/cart/increase/{{ $item['id'] }}"
-                       class="qty-btn">
-                        +
-                    </a>
-
+                    <a href="/cart/decrease/{{ $item['id'] }}" class="qty-btn">-</a>
+                    <div class="qty">{{ $item['qty'] }}</div>
+                    <a href="/cart/increase/{{ $item['id'] }}" class="qty-btn">+</a>
                 </div>
 
             </div>
@@ -283,7 +230,7 @@
 
             <div class="row">
                 <span>Subtotal</span>
-                <span>Rp{{ number_format($total) }}</span>
+                <span>Rp{{ number_format($total, 0, ',', '.') }}</span>
             </div>
 
             <div class="row">
@@ -293,17 +240,11 @@
 
             <div class="row total">
                 <span>Total</span>
-                <span>Rp{{ number_format($total + 5000) }}</span>
+                <span>Rp{{ number_format($total + 5000, 0, ',', '.') }}</span>
             </div>
 
-            <form action="/booking" method="POST">
-
-                @csrf
-
-                <button class="btn">
-                    Tentukan Jadwal
-                </button>
-
+            <form action="/booking/jadwal" method="GET">
+                <button class="btn">Tentukan Jadwal</button>
             </form>
 
         </div>

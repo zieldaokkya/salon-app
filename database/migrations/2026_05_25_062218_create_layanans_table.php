@@ -21,8 +21,6 @@ return new class extends Migration
 
             $table->string('nama_layanan');
 
-            $table->integer('harga');
-
             $table->integer('durasi');
 
             $table->text('deskripsi')->nullable();
