@@ -56,6 +56,8 @@ Route::middleware(['auth', 'role:customer'])->group(function () {
     Route::post('/booking', [CustomerController::class, 'booking']);
 
     Route::get('/booking/jadwal', [CustomerController::class, 'jadwal']);
+
+    Route::post('/booking/konfirmasi', [CustomerController::class, 'konfirmasi']);
 });
 
 
@@ -76,19 +78,7 @@ Route::middleware(['auth', 'role:mitra'])->group(function () {
 
     Route::get('/mitra/profile', [MitraController::class, 'profile']);
 
-    Route::get('/mitra/profile/edit', [MitraController::class, 'editProfile']);
-    
-    Route::post('/mitra/profile/update', [MitraController::class, 'updateProfile']);
-
     Route::get('/mitra/pelanggan/{id}', [\App\Http\Controllers\MitraController::class,'detailPelanggan']);
-
-    Route::delete('/mitra/pelanggan/{id}/hapus', [MitraController::class, 'hapusPelanggan']);
-
-    Route::post('/mitra/order/{id}/terima', [MitraController::class, 'terima']);
-
-    Route::post('/mitra/order/{id}/tolak', [MitraController::class, 'tolak']);
-    
-    Route::post('/mitra/order/{id}/selesai', [MitraController::class, 'selesai']);
     
     #Route::post('/logout', [AuthController::class, 'logout']);
 

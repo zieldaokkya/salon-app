@@ -12,7 +12,10 @@ class Booking extends Model
         'layanan_id',
         'status',
         'tanggal',
-        'jam'
+        'jam',
+        'metode',
+        'pembayaran',
+        'total'
     ];
 
     // 🔥 RELASI KE CUSTOMER (USER)

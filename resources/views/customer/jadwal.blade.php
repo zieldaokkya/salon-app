@@ -50,7 +50,7 @@
 
         h2{
             font-size:24px;
-            font-weight:800;
+            font-weight:700;
             color:#111827;
         }
 
@@ -171,16 +171,15 @@
         /* BUTTON */
         .btn{
             width:100%;
-            height:56px;
             border:none;
-            border-radius:18px;
-            background:#ff4d8d;
+            background:#ff4f8b;
             color:white;
-            font-size:16px;
-            font-weight:800;
-            margin-top:10px;
+            height:50px;
+            border-radius:12px;
+            font-size:15px;
+            font-weight:600;
+            margin-top:20px;
             cursor:pointer;
-            box-shadow:0 12px 25px rgba(255,77,141,.25);
         }
 
         .btn:hover{
@@ -256,7 +255,7 @@
             </div>
         </div>
 
-        <button class="btn">Tentukan Jadwal</button>
+        <button class="btn">konfirmasi</button>
 
     </form>
 

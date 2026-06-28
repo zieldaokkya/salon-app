@@ -47,6 +47,7 @@ class CustomerController extends Controller
         $cart[$id] = [
             'id' => $layanan->id,
             'salon_id' => $layanan->salon_id,
+            'nama_salon' => $layanan->salon->nama_salon,
             'nama_layanan' => $layanan->nama_layanan,
             'harga' => (int) $layanan->harga,
             'durasi' => $layanan->durasi,
@@ -142,12 +143,53 @@ class CustomerController extends Controller
 
     return view('customer.jadwal', compact('cart', 'total'));
 }
+public function konfirmasi(Request $request)
+{
+    $request->validate([
+        'tanggal_booking' => 'required|date',
+        'jam_booking' => 'required',
+        'metode' => 'required'
+    ]);
+
+    $cart = session()->get('cart', []);
+
+    if (empty($cart)) {
+        return redirect('/cart');
+    }
+
+    $subtotal = 0;
+
+    foreach ($cart as $item) {
+        $subtotal += $item['harga'] * $item['qty'];
+    }
+
+    $biayaLayanan = 5000;
+
+    $biayaHome = $request->metode == 'home' ? 15000 : 0;
+
+    $total = $subtotal + $biayaLayanan + $biayaHome;
+
+    return view('customer.konfirmasi', compact(
+        'cart',
+        'subtotal',
+        'biayaLayanan',
+        'biayaHome',
+        'total'
+    ))->with([
+        'tanggal_booking' => $request->tanggal_booking,
+        'jam_booking' => $request->jam_booking,
+        'metode' => $request->metode
+    ]);
+}
 
     public function booking(Request $request)
     {
-        $request->validate([
+       $request->validate([
             'tanggal_booking' => 'required|date',
-            'jam_booking' => 'required'
+            'jam_booking'     => 'required',
+            'metode'          => 'required',
+            'pembayaran'      => 'required',
+            'total'           => 'required|numeric'
         ]);
 
         $cart = session()->get('cart', []);
@@ -158,14 +200,21 @@ class CustomerController extends Controller
 
         foreach ($cart as $item) {
 
+            foreach ($cart as $item) {
+
             Booking::create([
                 'customer_id' => auth()->id(),
-                'salon_id' => $item['salon_id'],
-                'layanan_id' => $item['id'],
-                'tanggal_booking' => $request->tanggal_booking,
-                'jam_booking' => $request->jam_booking,
-                'status' => 'pending'
+                'salon_id'    => $item['salon_id'],
+                'layanan_id'  => $item['id'],
+                'tanggal'     => $request->tanggal_booking,
+                'jam'         => $request->jam_booking,
+                'metode'      => $request->metode,
+                'pembayaran'  => $request->pembayaran,
+                'total'       => $request->total,
+                'status'      => 'pending'
             ]);
+
+}
 
         }
 

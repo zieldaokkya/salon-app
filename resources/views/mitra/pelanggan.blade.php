@@ -298,21 +298,6 @@ Detail
 
 
 
-<form action="/mitra/pelanggan/{{ $p->id }}/hapus" method="POST">
-
-    @csrf
-    @method('DELETE')
-
-    <button 
-    class="btn delete"
-    onclick="return confirm('Yakin hapus pelanggan ini?')">
-
-        Hapus
-
-    </button>
-
-</form>
-
 
 
 </td>

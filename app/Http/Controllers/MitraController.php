@@ -197,19 +197,29 @@ public function pelanggan()
     $salon = Salon::where('user_id', auth()->id())->first();
 
     if (!$salon) {
-        return redirect('/mitra/dashboard')->with('error', 'Kamu belum punya salon');
+        return redirect('/mitra/dashboard')
+            ->with('error', 'Kamu belum punya salon');
     }
 
-    $pelanggan = Booking::with('customer')
-        ->where('salon_id', $salon->id)
-        ->select('user_id')
-        ->distinct()
-        ->get();
+    $pelanggan = User::whereIn(
+        'id',
+        Booking::where('salon_id', $salon->id)
+            ->pluck('customer_id')
+            ->unique()
+    )->get();
 
-    return view('mitra.detailpelanggan', [
-    'pelanggan' => $pelanggan,
-    'booking' => $riwayat
-]);
+    foreach ($pelanggan as $p) {
+        $booking = Booking::where('salon_id', $salon->id)
+            ->where('customer_id', $p->id);
+
+        $p->total_booking = $booking->count();
+
+        $last = $booking->latest()->first();
+
+        $p->last_booking = $last ? $last->tanggal : '-';
+    }
+
+    return view('mitra.pelanggan', compact('pelanggan'));
 }
 public function detailPelanggan($id)
 {
@@ -221,15 +231,43 @@ public function detailPelanggan($id)
 
     $pelanggan = User::findOrFail($id);
 
-    $riwayat = Booking::with('layanan')
+    $booking = Booking::with('layanan')
         ->where('salon_id', $salon->id)
         ->where('customer_id', $id)
         ->latest()
         ->get();
 
-    return view('mitra.detail-pelanggan', [
-        'pelanggan' => $pelanggan,
-        'booking' => $riwayat
-    ]);
+    return view('mitra.detail-pelanggan', compact(
+        'pelanggan',
+        'booking'
+    ));
 }
+
+public function riwayat()
+{
+    $salon = Salon::where('user_id', auth()->id())->first();
+
+    if (!$salon) {
+        return redirect('/mitra/dashboard');
+    }
+
+    $riwayat = Booking::with(['customer','layanan'])
+        ->where('salon_id', $salon->id)
+        ->whereIn('status', ['done','rejected'])
+        ->latest()
+        ->get();
+
+    return view('mitra.riwayat', compact('riwayat'));
+}
+
+public function profile()
+{
+    $user = auth()->user();
+
+    $salon = Salon::where('user_id', $user->id)->first();
+
+    return view('mitra.profile', compact('user', 'salon'));
+}
+
+
 }

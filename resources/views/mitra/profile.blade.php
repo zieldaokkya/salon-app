@@ -112,10 +112,6 @@
 
     </div>
 
-    <a href="/mitra/profile/edit" class="btn-edit">
-        Edit Profile
-    </a>
-
 </div>
 
 @endsection
